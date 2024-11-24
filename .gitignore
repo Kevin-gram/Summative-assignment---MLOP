@@ -1,0 +1,40 @@
+# Virtual Environment
+venv/
+env/
+student/Lib/site-packages/
+
+# Dependency Files
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+
+# Data Files
+*.csv
+*.xlsx
+*.json
+data/
+
+# Model Files
+*.h5
+*.pkl
+*.joblib
+*.pt
+
+# Logs and Temporary Files
+*.log
+*.tmp
+*.bak
+
+# IDE and Editor Files
+.vscode/
+.idea/
+.ipynb_checkpoints/
+
+# Credentials
+*.env
+config.json
+
+# System Files
+.DS_Store
+Thumbs.db
