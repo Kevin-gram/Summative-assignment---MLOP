@@ -1,7 +1,7 @@
 # Ignore virtual environments
 venv/
 env/
-student/
+student/Lib/site-packages/
 
 # Ignore Python cache files
 __pycache__/
@@ -30,9 +30,3 @@ config.json
 # Ignore system files
 .DS_Store
 Thumbs.db
-
-# Ignore node_modules for frontend
-node_modules
-
-# Ignore build output for frontend
-build
