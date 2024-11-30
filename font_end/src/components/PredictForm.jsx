@@ -22,8 +22,8 @@ const PredictForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
+    e.preventDefault();here
+    // Handle form submission logic 
     console.log(formData);
   };
 
@@ -44,7 +44,6 @@ const PredictForm = () => {
             <div className="mb-3">
               <label className="block text-gray-700 text-sm font-bold mb-1">Sex:</label>
               <select name="sex" value={formData.sex} onChange={handleChange} className="shadow appearance-none border border-blue-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-700">
-                <option value="">Select</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>

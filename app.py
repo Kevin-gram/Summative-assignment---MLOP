@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 import pandas as pd
-from model import build_model, train_model, save_model, load_existing_model
-from predict import make_prediction
-from preprocessing import preprocess_data
+from src.model import build_model, train_model, save_model, load_existing_model
+from src.prediction import make_prediction
+from src.preprocessing import preprocess_data
 
 app = Flask(__name__)
 
