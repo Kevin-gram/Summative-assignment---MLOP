@@ -25,7 +25,11 @@ const PredictForm = () => {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    // Debugging: Log the selected file to check if it's being correctly captured
+    console.log('Selected file for retraining:', selectedFile);
   };
 
   const handleSubmit = async (e) => {
@@ -61,21 +65,33 @@ const PredictForm = () => {
 
   const handleRetrain = async (e) => {
     e.preventDefault();
+
+    // Check if a file is selected
     if (!file) {
-      alert('Please upload a CSV file.');
+      alert('Please upload a CSV file for retraining.');
       return;
     }
+
+    // Create a new FormData object and append the file
     const formData = new FormData();
     formData.append('file', file);
+
+    // Debugging: Log FormData to ensure the file is being appended correctly
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
     try {
       const response = await fetch('http://localhost:5000/retrain', {
         method: 'POST',
-        body: formData
+        body: formData // Send the FormData as body of the request
       });
+
       const data = await response.json();
-      setRetrainMessage(data.message);
+      setRetrainMessage(data.message); // Assuming backend sends 'message' in the response
     } catch (error) {
       console.error('Error:', error);
+      setRetrainMessage('Error retraining model. Please try again.');
     }
   };
 
@@ -97,6 +113,7 @@ const PredictForm = () => {
           </animated.div>
         )}
       </animated.div>
+
       <animated.div style={slideIn} className="flex flex-col md:flex-row items-center mt-6 space-y-6 md:space-y-0 md:space-x-6 w-full max-w-4xl">
         <form onSubmit={handleSubmit} className="w-full md:w-2/3 bg-white bg-opacity-75 p-4 rounded-lg shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -133,24 +150,21 @@ const PredictForm = () => {
               <input type="number" name="age" value={formData.age} onChange={handleChange} className="shadow appearance-none border border-blue-500 rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-700" />
             </div>
           </div>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 transition-transform transform hover:scale-105 w-full">
+          <button type="submit" className="mt-4 bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">
             Predict
           </button>
         </form>
+
         <form onSubmit={handleRetrain} className="w-full md:w-1/3 bg-white bg-opacity-75 p-4 rounded-lg shadow-lg">
-          <div className="mb-2">
-            <label className="block text-gray-700 text-sm font-bold mb-1">Upload CSV for Retraining:</label>
-            <input type="file" accept=".csv" onChange={handleFileChange} className="shadow appearance-none border border-blue-500 rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-700" />
-          </div>
-          <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 transition-transform transform hover:scale-105 w-full">
-            Retrain
+          <h2 className="text-xl font-semibold text-blue-900 mb-4">Retrain Model</h2>
+          <input type="file" onChange={handleFileChange} className="mb-4" />
+          <button type="submit" className="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline">
+            Retrain Model
           </button>
+          {retrainMessage && (
+            <div className="mt-4 text-center text-lg text-gray-800">{retrainMessage}</div>
+          )}
         </form>
-        {retrainMessage && (
-          <div className="mt-4 p-4 bg-white bg-opacity-75 rounded-lg shadow-lg">
-            <p className="text-lg text-gray-800">{retrainMessage}</p>
-          </div>
-        )}
       </animated.div>
     </div>
   );

@@ -1,4 +1,4 @@
-# Use the official Python image from the Docker Hub
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
 # Set the working directory in the container
@@ -9,6 +9,17 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install Node.js and npm
+RUN apt-get update && apt-get install -y nodejs npm
+
+# Install frontend dependencies and build the frontend
+WORKDIR /app/frontend
+RUN npm install
+RUN npm run build
+
+# Set the working directory back to /app
+WORKDIR /app
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000

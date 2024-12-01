@@ -51,27 +51,51 @@ def predict():
 
 @app.route('/retrain', methods=['POST'])
 def retrain():
-    data = request.get_json(force=True)
-    df = pd.DataFrame(data)
+    print('===========================')
+    print(request.files)  # Debugging line to see what files were uploaded
+    
+    # Check if the request contains the file
+    if 'data' not in request.files:  # Use 'data' instead of 'file'
+        return jsonify({'error': 'No file part in the request'}), 400
+
+    file = request.files['data']  # Change 'file' to 'data'
+    
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    try:
+        # Read the CSV file into a pandas DataFrame
+        df = pd.read_csv(file)
+    except Exception as e:
+        return jsonify({'error': f'Error reading CSV file: {str(e)}'}), 400
+    
+    # Check if the 'Outcome' column exists
+    if 'Outcome' not in df.columns:
+        return jsonify({'error': 'Missing target column "Outcome" in the dataset'}), 400
+    
+    # Prepare the training data
     x_train = df.drop('Outcome', axis=1)
     y_train = df['Outcome']
     
-    # Fit the scaler with the training data
-    scaler = StandardScaler()
-    x_train_scaled = scaler.fit_transform(x_train)
+    # Load the existing model
+    model_path = './notebook/diabetes_model.keras'
+    if os.path.exists(model_path):
+        try:
+            model = load_model(model_path)
+        except Exception as e:
+            return jsonify({'error': f"Error loading model: {e}"}), 500
+    else:
+        return jsonify({'error': 'Model not found'}), 404
     
+    # Retrain the model
     try:
-        model = load_model('notebook/diabetes_prediction_model.h5')
+        model.fit(x_train, y_train, epochs=20, batch_size=32, validation_split=0.2)
+        # Save the retrained model
+        model.save(model_path)
+        return jsonify({'message': 'Model retrained successfully'}), 200
     except Exception as e:
-        app.logger.warning(f"Model file not found, building a new model: {e}")
-        model = build_model((8,))
-    try:
-        model.fit(x_train_scaled, y_train, epochs=100, batch_size=32, validation_split=0.2)
-        model.save('notebook/diabetes_prediction_model.h5')
-        return jsonify({'message': 'Model retrained successfully'})
-    except Exception as e:
-        app.logger.error(f"Error retraining model: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f"Error retraining model: {e}"}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
