@@ -11,20 +11,19 @@ Badges
 - Diabetes Prediction
 - Flask 2.0.1
 - TensorFlow 2.6.0
-- MIT License
-
 Table of Contents
 -----------------
 1. Project Description
 2. Features
 3. Front-End Setup Instructions
 4. Backend Setup Instructions
-5. Usage
-6. API Endpoints
-7. Model Retraining Capability
-8. Contributing
-9. License
-10. Contact
+5. Docker Setup
+6. Usage
+7. API Endpoints
+8. Model Retraining Capability
+9. Contributing
+10. License
+11. Contact
 
 Project Description
 -------------------
@@ -89,15 +88,37 @@ Steps to Set Up the Backend:
    python app.py
    This will start the API on http://localhost:5000.
 
+Docker Setup
+-------------
+To run the Diabetes Prediction and Retraining API in a Docker container, use the following Docker image:
+
+Docker Image:  
+`docker pull kevinny2k/diabetes-prediction-app:latest`
+
+Steps to Run with Docker:
+1. Pull the Docker image:
+docker pull kevinny2k/diabetes-prediction-app:latest
+
+markdown
+Copy code
+
+2. Run the Docker container:
+docker run -d -p 5000:5000 kevinny2k/diabetes-prediction-app:latest
+
+markdown
+Copy code
+
+This will start the API inside the Docker container and expose it on port 5000.
+
 Usage
 ---------------
 1. Initial Prediction:
-   - Use the existing trained model
-   - Predict diabetes risk using the /predict endpoint.
+- Use the existing trained model
+- Predict diabetes risk using the /predict endpoint.
 
 2. Model Enhancement:
-   - Collect new patient data.
-   - Upload the dataset via the /retrain endpoint to retrain the model.
+- Collect new patient data.
+- Upload the dataset via the /retrain endpoint to retrain the model.
 
 API Endpoints
 -------------
