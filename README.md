@@ -179,6 +179,6 @@ Contact & Collaboration
 - **GitHub**: kevin-gram
 
 Disclaimer: 
-- Machine learning model for research purposes
+- Machine learning model for academic purposes
 - Not a substitute for professional medical advice
 - Always consult healthcare professionals
